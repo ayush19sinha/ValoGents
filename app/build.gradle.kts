@@ -4,11 +4,12 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "my.android.valogents"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "my.android.valogents"
@@ -47,9 +48,10 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation (libs.retrofit)
-    implementation(libs.logging.interceptor)
+    implementation(libs.converter.gson)
     implementation(libs.kotlinx.serialization.json)
-    ksp (libs.hilt.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

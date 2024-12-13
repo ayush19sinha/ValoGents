@@ -4,43 +4,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
+import dagger.hilt.android.AndroidEntryPoint
+import my.android.valogents.navigation.AppNavigation
 import my.android.valogents.ui.theme.ValoGentsTheme
+import my.android.valogents.ui.viewmodel.AgentDetailViewModel
+import my.android.valogents.ui.viewmodel.AgentListViewModel
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val agentListViewModel :AgentListViewModel by viewModels()
+    private val agentDetailViewModel :AgentDetailViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             ValoGentsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AppNavigation(agentListViewModel = agentListViewModel,
+                    agentDetailViewModel = agentDetailViewModel )
             }
         }
-    }
-}
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ValoGentsTheme {
-        Greeting("Android")
     }
 }
