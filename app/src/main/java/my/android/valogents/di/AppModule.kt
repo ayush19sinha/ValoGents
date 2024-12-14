@@ -17,7 +17,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(): Retrofit{
         return Retrofit.Builder()
-            .baseUrl("https://valorant-api.com/")
+            .baseUrl("https://valorant-api.com/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

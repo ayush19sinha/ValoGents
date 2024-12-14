@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 object AgentListScreen
 
 @Serializable
-data class AgentDetailScreen(val id:Int)
+data class AgentDetailScreen(val uuid: String)
