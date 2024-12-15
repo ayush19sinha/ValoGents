@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import my.android.valogents.data.model.Ability
+import my.android.valogents.ui.theme.poppinsFontFamily
 import my.android.valogents.ui.viewmodel.AgentViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -157,6 +158,8 @@ fun AgentDescription(description: String) {
         Text(
             description,
             color = Color.White.copy(alpha = 0.8f),
+            fontFamily = poppinsFontFamily,
+            fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(top = 8.dp)
         )
     }
@@ -187,6 +190,8 @@ fun AbilitiesSection(
             Text(
                 selectedAbility.description,
                 color = Color.White.copy(alpha = 0.8f),
+                fontFamily = poppinsFontFamily,
+                fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
@@ -198,6 +203,7 @@ fun SectionTitle(title: String) {
     Text(
         title,
         fontSize = 22.sp,
+        fontFamily = poppinsFontFamily,
         fontWeight = FontWeight.Bold,
         color = Color.White
     )

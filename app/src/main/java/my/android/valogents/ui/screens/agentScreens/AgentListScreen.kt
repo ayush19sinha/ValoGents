@@ -3,6 +3,7 @@ package my.android.valogents.ui.screens.agentScreens
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -108,6 +109,8 @@ fun SharedTransitionScope.AgentListScreen(
             LazyColumn(
                 contentPadding = PaddingValues(8.dp),
                 modifier = Modifier.padding(padding)
+                    .fillMaxSize()
+                    .background(Color(0xFF111922))
             ) {
                 items(agents.value.filter {
                     it.displayName.contains(searchQuery, ignoreCase = true)
@@ -155,7 +158,8 @@ fun SearchField(
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(Color(0xFF111922)),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(color = Color(0xFFFF4655))
