@@ -8,9 +8,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_valorant"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_valorant"
         android:supportsRtl="true"
         android:theme="@style/Theme.ValoGents"
         tools:targetApi="31">
@@ -18,7 +18,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ValoGents">
+            android:theme="@style/Theme.ValoGents.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
