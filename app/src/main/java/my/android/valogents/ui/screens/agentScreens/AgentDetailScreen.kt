@@ -1,5 +1,8 @@
 package my.android.valogents.ui.screens.agentScreens
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,9 +45,13 @@ import coil3.compose.AsyncImage
 import my.android.valogents.data.model.Ability
 import my.android.valogents.ui.viewmodel.AgentViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun AgentDetailScreen(agentViewModel: AgentViewModel, agentId: String, onBackClick:()-> Unit) {
+fun SharedTransitionScope.AgentDetailScreen(
+    agentViewModel: AgentViewModel,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    agentId: String, onBackClick: () -> Unit
+) {
     val agent by agentViewModel.getAgentById(agentId).collectAsState(initial = null)
     var specialAbility by rememberSaveable { mutableIntStateOf(0) }
 
@@ -53,9 +60,14 @@ fun AgentDetailScreen(agentViewModel: AgentViewModel, agentId: String, onBackCli
             topBar = {
                 TopAppBar(
                     title = { Text(it.displayName) },
-                    navigationIcon = { IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back Arrow", tint = Color.White) } },
+                    navigationIcon = {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back Arrow", tint = Color.White
+                            )
+                        }
+                    },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color(0xFF111922),
                         titleContentColor = Color.White
@@ -74,9 +86,26 @@ fun AgentDetailScreen(agentViewModel: AgentViewModel, agentId: String, onBackCli
                         .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                 ) {
-                    AgentPortrait(it.fullPortrait)
+                    AgentPortrait(
+                        it.fullPortrait,
+                        modifier = Modifier.sharedElement(
+                            state = rememberSharedContentState(
+                                key = "image-${it.uuid}"
+                            ),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
-                    AgentRole(it.role.displayIcon, it.role.displayName)
+                    AgentRole(
+                        it.role.displayIcon, it.role.displayName,
+                        modifier = Modifier
+                            .sharedElement(
+                                state = rememberSharedContentState(
+                                    key = "agentRole-${it.uuid}"
+                                ),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
                     AgentDescription(it.description)
                     Spacer(modifier = Modifier.height(24.dp))
@@ -90,23 +119,27 @@ fun AgentDetailScreen(agentViewModel: AgentViewModel, agentId: String, onBackCli
 }
 
 @Composable
-fun AgentPortrait(portraitUrl: String) {
+fun AgentPortrait(portraitUrl: String, modifier: Modifier = Modifier) {
     AsyncImage(
         model = portraitUrl,
         contentDescription = "Agent Portrait",
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .height(300.dp)
+            .height(320.dp)
             .clip(RoundedCornerShape(16.dp)),
         contentScale = ContentScale.Crop
     )
 }
 
 @Composable
-fun AgentRole(roleIconUrl: String, roleName: String) {
+fun AgentRole(
+    roleIconUrl: String, roleName: String,
+    modifier: Modifier = Modifier
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
     ) {
         AsyncImage(
             model = roleIconUrl,

@@ -1,5 +1,8 @@
 package my.android.valogents.ui.screens.agentScreens.components
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +17,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,32 +34,35 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import my.android.valogents.data.model.Agent
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun AgentCard(agent: Agent, onAgentClick:(String)-> Unit) {
+fun SharedTransitionScope.AgentCard(
+    agent: Agent,
+    onAgentClick: (String) -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
     val gradientColor = agent.backgroundGradientColors.map {
         Color(android.graphics.Color.parseColor("#${it.dropLast(2)}"))
     }
 
-    Surface(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(240.dp)
+            .height(280.dp)
             .padding(16.dp)
             .clickable { onAgentClick(agent.uuid) },
         shape = RoundedCornerShape(16.dp),
-        shadowElevation = 8.dp
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(
             modifier = Modifier
-                .background(
-                    brush = Brush.linearGradient(gradientColor)
-                )
+                .background(brush = Brush.linearGradient(gradientColor))
                 .fillMaxSize()
         ) {
             AsyncImage(
                 model = agent.background,
                 contentDescription = "Agent Background",
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 alpha = 0.3f
             )
@@ -73,7 +79,11 @@ fun AgentCard(agent: Agent, onAgentClick:(String)-> Unit) {
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxHeight()
-                    .aspectRatio(1.1f),
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "image-${agent.uuid}"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                    .aspectRatio(1f),
                 contentScale = ContentScale.Crop
             )
 
@@ -85,25 +95,33 @@ fun AgentCard(agent: Agent, onAgentClick:(String)-> Unit) {
                 Text(
                     text = agent.displayName,
                     color = Color.White,
-                    fontSize = 28.sp,
+                    fontSize = 32.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState(key = "name-${agent.uuid}"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState(key = "agentRole-${agent.uuid}"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
                 ) {
                     AsyncImage(
                         model = agent.role.displayIcon,
                         contentDescription = "Role icon",
-                        modifier = Modifier.size(22.dp)
+                        modifier = Modifier.size(24.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = agent.role.displayName,
                         color = Color.White,
-                        fontSize = 16.sp
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
                     )
                 }
             }
