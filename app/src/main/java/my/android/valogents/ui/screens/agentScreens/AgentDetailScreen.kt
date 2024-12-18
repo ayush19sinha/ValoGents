@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -39,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -60,7 +63,13 @@ fun SharedTransitionScope.AgentDetailScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(it.displayName) },
+                    title = {
+                        Text(
+                            it.displayName,
+                            fontFamily = poppinsFontFamily,
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
                             Icon(
@@ -173,11 +182,11 @@ fun AbilitiesSection(
 ) {
     Column {
         SectionTitle("Special Abilities")
-        Row(
+        LazyRow (
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(top = 8.dp)
         ) {
-            abilities.forEachIndexed { index, ability ->
+            itemsIndexed(abilities) { index, ability ->
                 AbilityButton(
                     ability = ability,
                     isSelected = index == selectedAbilityIndex,
@@ -232,6 +241,7 @@ fun AbilityButton(ability: Ability, isSelected: Boolean, onClick: () -> Unit) {
         }
         Text(
             ability.displayName,
+            textAlign = TextAlign.Center,
             fontSize = 12.sp,
             color = if (isSelected) Color.White else Color.White.copy(alpha = 0.7f),
             maxLines = 1

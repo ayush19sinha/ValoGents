@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ValoGentsTheme {
+            ValoGentsTheme(dynamicColor = false) {
                 AppNavigation(agentViewModel = agentViewModel)
             }
         }

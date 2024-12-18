@@ -23,6 +23,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import my.android.valogents.ui.screens.agentScreens.components.AgentCard
+import my.android.valogents.ui.theme.poppinsFontFamily
 import my.android.valogents.ui.viewmodel.AgentViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -81,7 +83,9 @@ fun SharedTransitionScope.AgentListScreen(
                             }
                         )
                     } else {
-                        Text("ValoGent App", fontWeight = FontWeight.Bold)
+                        Text("ValoGent App",
+                            fontFamily = poppinsFontFamily,
+                            fontWeight = FontWeight.Bold)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -144,7 +148,10 @@ fun SearchField(
                 value = query,
                 onValueChange = onQueryChanged,
                 modifier = Modifier.weight(1f),
-                placeholder = { Text("Search...") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White),
+                placeholder = { Text("Search for your favourite agent...") },
                 singleLine = true
             )
             IconButton(onClick = onCloseSearch) {
